@@ -24,3 +24,23 @@ jobs:
       run: npm run test:unit
     - name: Show my SoftUni username
       run: echo "ValeriDimov84"
+
+
+  ui_test:
+    needs: build-unit_test 
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v4
+    - name: Use Node.js 20x
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20.x
+        cache: 'npm'
+    - name: Install app dependencies
+      run: npm install
+    - name: Start app on localhost and close the open terminal
+      run: npm start &
+    - name: Run ui tests
+      run: npm run test:ui
