@@ -1,4 +1,4 @@
-name: Build App and Unit Test
+name: Build App, Unit Test, UI Test and Deploy
 
 on:
   push:
@@ -46,3 +46,18 @@ jobs:
       run: npx playwright install
     - name: Run ui tests
       run: npm run test:ui
+
+  deploy:
+    needs: ui_test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v4
+    - name: Deploy app on render.com
+      uses: JorgeLNJunior/render-deploy@v1.4.4
+      with:
+        service_id: ${{ secrets.RENDER_SERVER_KEY }}
+        api_key: ${{ secrets.RENDER_API_KEY }}
+        clear_cache: true
+        wait_deploy: true
